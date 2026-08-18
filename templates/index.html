@@ -6,19 +6,19 @@
 
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, sans-serif;
             text-align: center;
             background: #f2f2f2;
-            padding: 40px;
+            padding: 30px;
         }
 
         .container {
             max-width: 500px;
             margin: auto;
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px #aaa;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px #aaa;
         }
 
         input {
@@ -28,24 +28,19 @@
         }
 
         button {
-            padding: 12px 30px;
+            padding: 12px 25px;
             background: #007bff;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
         }
 
-        .danger {
-            color: red;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .safe {
-            color: green;
-            font-size: 24px;
-            font-weight: bold;
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eee;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -54,32 +49,43 @@
 
     <div class="container">
 
-        <h1>🚗 Smart Traffic System</h1>
-
-        <h2>Accident Detection</h2>
+        <h1>🚗 Smart Traffic Accident Alert</h1>
 
         <form action="/predict" method="POST">
 
-            <input type="number" step="any" name="speed" placeholder="Speed (km/h)" required>
+            <input type="number" name="speed" step="any" placeholder="Vehicle Speed (km/h)" required>
 
-            <input type="number" step="any" name="acceleration" placeholder="Acceleration (m/s²)" required>
+            <input type="number" name="acceleration" step="any" placeholder="Acceleration (m/s²)" required>
 
-            <input type="number" step="any" name="impact" placeholder="Impact Level (0-10)" required>
+            <input type="number" name="impact" step="any" placeholder="Impact Level (0-10)" required>
 
-            <input type="number" step="any" name="tilt" placeholder="Vehicle Tilt (degrees)" required>
+            <input type="number" name="tilt" step="any" placeholder="Vehicle Tilt (degrees)" required>
 
             <br>
 
-            <button type="submit">
-                Detect Accident
-            </button>
+            <button type="submit">Predict Accident Risk</button>
 
         </form>
 
         {% if result %}
-        <p class="{{ status }}">
-            {{ result }}
-        </p>
+
+        <div class="result">
+
+            <h2>{{ result }}</h2>
+
+            <h3>📊 Accident Risk: {{ risk }}%</h3>
+
+            <p>{{ message }}</p>
+
+            <hr>
+
+            <p>Speed: {{ speed }} km/h</p>
+            <p>Acceleration: {{ acceleration }} m/s²</p>
+            <p>Impact Level: {{ impact }}</p>
+            <p>Vehicle Tilt: {{ tilt }}°</p>
+
+        </div>
+
         {% endif %}
 
     </div>
