@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Smart Traffic Accident Alert</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f2f2f2;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px #aaa;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 8px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .danger {
+            color: red;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .safe {
+            color: green;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🚗 Smart Traffic System</h1>
+
+        <h2>Accident Detection</h2>
+
+        <form action="/predict" method="POST">
+
+            <input type="number" step="any" name="speed" placeholder="Speed (km/h)" required>
+
+            <input type="number" step="any" name="acceleration" placeholder="Acceleration (m/s²)" required>
+
+            <input type="number" step="any" name="impact" placeholder="Impact Level (0-10)" required>
+
+            <input type="number" step="any" name="tilt" placeholder="Vehicle Tilt (degrees)" required>
+
+            <br>
+
+            <button type="submit">
+                Detect Accident
+            </button>
+
+        </form>
+
+        {% if result %}
+        <p class="{{ status }}">
+            {{ result }}
+        </p>
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
