@@ -7,40 +7,116 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background: #f4f6f8;
             text-align: center;
-            background: #f2f2f2;
-            padding: 30px;
+            padding: 40px;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 750px;
             margin: auto;
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px #aaa;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            color: #222;
         }
 
         input {
-            width: 90%;
             padding: 10px;
-            margin: 8px;
+            margin: 7px;
+            width: 220px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
         }
 
         button {
             padding: 12px 25px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 7px;
             background: #007bff;
             color: white;
-            border: none;
-            border-radius: 6px;
+            font-size: 16px;
             cursor: pointer;
         }
 
+        button:hover {
+            background: #0056b3;
+        }
+
         .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .risk {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 15px;
+        }
+
+        .risk-meter {
+            width: 100%;
+            height: 25px;
+            background: #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .risk-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #ffc107, #dc3545);
+            border-radius: 15px;
+            transition: width 0.8s ease;
+        }
+
+        .details {
             margin-top: 20px;
-            padding: 15px;
-            background: #eee;
-            border-radius: 8px;
+            text-align: left;
+            line-height: 2;
+        }
+
+        .performance {
+            margin-top: 35px;
+        }
+
+        .performance h2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        .best {
+            font-weight: bold;
+            background: #e8f5e9;
+        }
+
+        .note {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
         }
     </style>
 </head>
@@ -53,40 +129,116 @@
 
         <form action="/predict" method="POST">
 
-            <input type="number" name="speed" step="any" placeholder="Vehicle Speed (km/h)" required>
+            <input type="number" step="any" name="speed" placeholder="Vehicle Speed (km/h)" required>
 
-            <input type="number" name="acceleration" step="any" placeholder="Acceleration (m/s²)" required>
+            <input type="number" step="any" name="acceleration" placeholder="Acceleration (m/s²)" required>
 
-            <input type="number" name="impact" step="any" placeholder="Impact Level (0-10)" required>
+            <input type="number" step="any" name="impact" placeholder="Impact Level (0-10)" required>
 
-            <input type="number" name="tilt" step="any" placeholder="Vehicle Tilt (degrees)" required>
+            <input type="number" step="any" name="tilt" placeholder="Vehicle Tilt (degrees)" required>
 
             <br>
 
-            <button type="submit">Predict Accident Risk</button>
+            <button type="submit">
+                Predict Accident Risk
+            </button>
 
         </form>
 
-        {% if result %}
+
+        {% if risk %}
 
         <div class="result">
 
             <h2>{{ result }}</h2>
 
-            <h3>📊 Accident Risk: {{ risk }}%</h3>
+            <div class="risk">
+                📊 Accident Risk: {{ risk }}%
+            </div>
+
+            <div class="risk-meter">
+                <div class="risk-fill" style="width: {{ risk }}%;">
+                </div>
+            </div>
+
+            <h2>{{ risk_level }}</h2>
 
             <p>{{ message }}</p>
 
             <hr>
 
-            <p>Speed: {{ speed }} km/h</p>
-            <p>Acceleration: {{ acceleration }} m/s²</p>
-            <p>Impact Level: {{ impact }}</p>
-            <p>Vehicle Tilt: {{ tilt }}°</p>
+            <div class="details">
+
+                <strong>Speed:</strong>
+                {{ speed }} km/h
+                <br>
+
+                <strong>Acceleration:</strong>
+                {{ acceleration }} m/s²
+                <br>
+
+                <strong>Impact Level:</strong>
+                {{ impact }}
+                <br>
+
+                <strong>Vehicle Tilt:</strong>
+                {{ tilt }}°
+
+            </div>
 
         </div>
 
         {% endif %}
+
+
+        <!-- MODEL PERFORMANCE -->
+
+        <div class="performance">
+
+            <h2>📈 Model Performance</h2>
+
+            <table>
+
+                <tr>
+                    <th>Model</th>
+                    <th>Accuracy</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1 Score</th>
+                </tr>
+
+                <tr>
+                    <td>Logistic Regression</td>
+                    <td>80.5%</td>
+                    <td>81.0%</td>
+                    <td>87.2%</td>
+                    <td>84.0%</td>
+                </tr>
+
+                <tr>
+                    <td>Decision Tree</td>
+                    <td>98.0%</td>
+                    <td>98.3%</td>
+                    <td>98.3%</td>
+                    <td>98.3%</td>
+                </tr>
+
+                <tr class="best">
+                    <td>🏆 Random Forest</td>
+                    <td>99.0%</td>
+                    <td>98.3%</td>
+                    <td>100%</td>
+                    <td>99.2%</td>
+                </tr>
+
+            </table>
+
+            <p class="note">
+                Random Forest achieved the best overall F1 score
+                and was selected as the final prediction model.
+            </p>
+
+        </div>
 
     </div>
 

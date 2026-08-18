@@ -4,7 +4,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# Load trained model
+# Load trained Random Forest model
 model = joblib.load("model/accident_model.pkl")
 
 
@@ -15,12 +15,13 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+
     speed = float(request.form["speed"])
     acceleration = float(request.form["acceleration"])
     impact = float(request.form["impact"])
     tilt = float(request.form["tilt"])
 
-    # Use the exact feature names used during training
+    # Use exact feature names used during model training
     input_data = pd.DataFrame([{
         "Speed": speed,
         "Acceleration": acceleration,
@@ -35,6 +36,15 @@ def predict():
     probability = model.predict_proba(input_data)[0][1]
     risk = probability * 100
 
+    # Risk level
+    if risk < 30:
+        risk_level = "🟢 LOW RISK"
+    elif risk < 70:
+        risk_level = "🟡 MEDIUM RISK"
+    else:
+        risk_level = "🔴 HIGH RISK"
+
+    # Result
     if prediction[0] == 1:
         result = "⚠️ Accident detected!"
         message = "🚨 Emergency alert should be triggered."
@@ -47,6 +57,7 @@ def predict():
         result=result,
         message=message,
         risk=f"{risk:.2f}",
+        risk_level=risk_level,
         speed=speed,
         acceleration=acceleration,
         impact=impact,
